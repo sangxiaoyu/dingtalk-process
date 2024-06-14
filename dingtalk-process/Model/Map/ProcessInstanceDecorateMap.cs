@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dingtalk_process.Model
+namespace dingtalk_process
 {
     public class ProcessInstanceDecorateMap
     {

@@ -26,3 +26,6 @@ Thumbs.db
 # 忽略构建工具输出
 dist/
 build/
+
+# 去除编辑器的文件被占用
+.vs

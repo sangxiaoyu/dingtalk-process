@@ -5,9 +5,10 @@ namespace dingtalk_process
 {
     public static class ServiceCollection
     {
-        public static void DingTalkService(this IServiceCollection services, IConfiguration config)
+        public static void AddDingTalkService(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IDingDingAuth, DingDingAuth>();
+            services.AddScoped<IProcessInstance, ProcessInstance>();
             services.Configure<Constant>(config.GetSection("Constant"));
         }
     }
