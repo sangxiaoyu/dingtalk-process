@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dingtalk_process
 {
-    public class DingProcWithdraw
+    public class DingProcessWithdraw
     {
         /// <summary>
         /// 审批实例ID

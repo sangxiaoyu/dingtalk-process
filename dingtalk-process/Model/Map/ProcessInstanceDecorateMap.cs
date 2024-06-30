@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace dingtalk_process
 {
+    /// <summary>
+    /// 表单装饰器，通过业务便捷的实体结构装饰为官方需求的格式
+    /// </summary>
     public class ProcessInstanceDecorateMap
     {
         /// <summary>

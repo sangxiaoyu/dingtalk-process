@@ -29,3 +29,5 @@ build/
 
 # 去除编辑器的文件被占用
 .vs
+# 忽略自定义文件
+dingtalk-process.Tests/

@@ -10,7 +10,7 @@ namespace dingtalk_process
     /// 响应格式
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DingResponseModel<T>
+    public class ResponseModel<T>
     {
         /// <summary>
         /// 是否成功

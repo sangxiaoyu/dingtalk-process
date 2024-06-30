@@ -17,9 +17,9 @@ namespace dingtalk_process.Repository
         /// </summary>
         /// <param name="process">审批实例所需要的body参数</param>
         /// <returns></returns>
-        public async Task<DingResponseModel<dynamic>> StartProcessInstance(ProcessInstanceRequest process)
+        public async Task<ResponseModel<dynamic>> StartProcessInstance(ProcessInstanceRequest process)
         {
-            var response = new DingResponseModel<dynamic>();
+            var response = new ResponseModel<dynamic>();
             try
             {
                 using (var client = new HttpClient())
@@ -51,9 +51,9 @@ namespace dingtalk_process.Repository
         /// </summary>
         /// <param name="userId">用户钉钉 id</param>
         /// <returns></returns>
-        public async Task<DingResponseModel<dynamic>> GetFailEventResult()
+        public async Task<ResponseModel<dynamic>> GetFailEventResult()
         {
-            var response = new DingResponseModel<dynamic>();
+            var response = new ResponseModel<dynamic>();
             try
             {
                 using (var client = new HttpClient())
@@ -71,6 +71,71 @@ namespace dingtalk_process.Repository
                         response.success = false;
                         var response_model = await request.Content.ReadFromJsonAsync<ErrorBack>();
                         response.result = response_model ?? new ErrorBack();
+                        throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (OApiException error)
+            {
+                error.printStackTrace();
+            }
+            return response;
+        }
+        /// <summary>
+        /// 撤销审批实例
+        /// </summary>
+        /// <param name="process"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<string> WithdrawProcessInstance(DingProcessWithdraw process)
+        {
+            var response = string.Empty;
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("x-acs-dingtalk-access-token", _access.GetAccessToken(false));
+                    var request = await client.PostAsync($"{_constant.DING_URL_API}/workflow/processInstances/terminate", JsonContent.Create(process));
+                    if (request.IsSuccessStatusCode)
+                    {
+                        response = await request.Content.ReadAsStringAsync();
+                        return response;
+                    }
+                    else
+                    {
+                        response = await request.Content.ReadAsStringAsync();
+                        throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (OApiException error)
+            {
+                error.printStackTrace();
+            }
+            return response;
+        }
+        /// <summary>
+        /// 获取单个审批实例详情
+        /// </summary>
+        /// <param name="processInstanceId">审批实例详情id</param>
+        /// <returns></returns>
+        public async Task<string> SingleProcessInstance(string processInstanceId)
+        {
+            var response = string.Empty;
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("x-acs-dingtalk-access-token", _access.GetAccessToken(true));
+                    var request = await client.GetAsync($"{_constant.DING_URL_API}/workflow/processInstances?processInstanceId={processInstanceId}");
+                    if (request.IsSuccessStatusCode)
+                    {
+                        response = await request.Content.ReadAsStringAsync();
+                        return response;
+                    }
+                    else
+                    {
+                        response = await request.Content.ReadAsStringAsync();
                         throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
                     }
                 }

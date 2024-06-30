@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dingtalk-process", "dingtalk-process\dingtalk-process.csproj", "{B4960964-3356-46A9-9012-41408977832F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dingtalk-process.tests", "dingtalk-process.Tests\dingtalk-process.tests.csproj", "{83461AB1-9038-4DFF-A86F-B947ECEBE9C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B4960964-3356-46A9-9012-41408977832F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4960964-3356-46A9-9012-41408977832F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4960964-3356-46A9-9012-41408977832F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83461AB1-9038-4DFF-A86F-B947ECEBE9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83461AB1-9038-4DFF-A86F-B947ECEBE9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83461AB1-9038-4DFF-A86F-B947ECEBE9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83461AB1-9038-4DFF-A86F-B947ECEBE9C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
