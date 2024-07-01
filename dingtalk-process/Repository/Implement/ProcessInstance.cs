@@ -146,5 +146,74 @@ namespace dingtalk_process.Repository
             }
             return response;
         }
+
+        /// <summary>
+        /// 获取表单实例
+        /// </summary>
+        /// <param name="processCode">流程code</param>
+        /// <param name="appUuid"></param>
+        /// <returns></returns>
+        public async Task<string> GetSingleSchema(string processCode, string appUuid = "")
+        {
+            var response = string.Empty;
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("x-acs-dingtalk-access-token", _access.GetAccessToken(true));
+                    var request = await client.GetAsync($"{_constant.DING_URL_API}/workflow/forms/schemas/processCodes?processCode={processCode}");
+                    if (request.IsSuccessStatusCode)
+                    {
+                        response = await request.Content.ReadAsStringAsync();
+                        return response;
+                    }
+                    else
+                    {
+                        response = await request.Content.ReadAsStringAsync();
+                        throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (OApiException error)
+            {
+                error.printStackTrace();
+            }
+            return response;
+        }
+        /// <summary>
+        /// 获取当前企业可看的流程模板
+        /// </summary>
+        /// <param name="userId">用户钉钉 id</param>
+        /// <returns></returns>
+        public async Task<ResponseModel<dynamic>> GetMoreProcess(string userId)
+        {
+            var response = new ResponseModel<dynamic>();
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("x-acs-dingtalk-access-token", _access.GetAccessToken(true));
+                    var request = await client.GetAsync($"{_constant.DING_URL_API}/workflow/processes/managements/templates?userId={userId}");
+                    if (request.IsSuccessStatusCode)
+                    {
+                        var response_model = await request.Content.ReadFromJsonAsync<ResponseModel<List<DingProcessInstance>>>();
+                        response.result = response_model?.result;
+                        return response;
+                    }
+                    else
+                    {
+                        response.success = false;
+                        var response_model = await request.Content.ReadFromJsonAsync<ErrorBack>();
+                        response.result = response_model ?? new ErrorBack();
+                        throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (OApiException error)
+            {
+                error.printStackTrace();
+            }
+            return response;
+        }
     }
 }

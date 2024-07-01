@@ -34,5 +34,18 @@ namespace dingtalk_process.Repository
         /// <param name="processInstanceId">审批实例详情id</param>
         /// <returns></returns>
         Task<string> SingleProcessInstance(string processInstanceId);
+        /// <summary>
+        /// 获取表单信息
+        /// </summary>
+        /// <param name="processCode">表单的唯一码</param>
+        /// <param name="appUuid">应用搭建隔离信息</param>
+        /// <returns></returns>
+        Task<string> GetSingleSchema(string processCode, string appUuid = "");
+        /// <summary>
+        /// 获取当前企业所有可管理的表单
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<ResponseModel<dynamic>> GetMoreProcess(string userId);
     }
 }
