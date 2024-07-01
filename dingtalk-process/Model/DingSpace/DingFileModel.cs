@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dingtalk_process.Model.DingSpace
+namespace dingtalk_process.Model
 {
     public class DingFileModel
     {

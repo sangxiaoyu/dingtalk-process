@@ -1,15 +1,11 @@
-﻿using dingtalk_process.Model.DingSpace;
+﻿using dingtalk_process.Model;
 using dingtalk_process.Repository;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Net;
+using System.Net.Http.Json;
 using System.Runtime.Caching;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace dingtalk_process
 {

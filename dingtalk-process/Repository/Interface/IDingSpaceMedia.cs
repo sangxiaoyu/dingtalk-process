@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using dingtalk_process.Model.DingSpace;
+﻿using dingtalk_process.Model;
 
 namespace dingtalk_process
 {
