@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dingtalk_process
+namespace dingtalk_process.Model
 {
     /// <summary>
     /// 钉盘空间

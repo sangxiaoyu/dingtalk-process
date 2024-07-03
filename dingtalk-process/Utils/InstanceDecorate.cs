@@ -1,4 +1,5 @@
-﻿using dingtalk_process.Utils;
+﻿using AutoMapper;
+using dingtalk_process.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,42 +14,51 @@ namespace dingtalk_process
     public class InstanceDecorate
     {
         private readonly DingSpaceMediaUtil _dingFile;
-        public InstanceDecorate(DingSpaceMediaUtil dingFile)
+        private readonly IMapper _map;
+        public InstanceDecorate(DingSpaceMediaUtil dingFile, IMapper map)
         {
             _dingFile = dingFile;
+            _map = map;
         }
         public ProcessInstanceRequest GenerateForms(ProcessInstanceDecorateMap decorateMap)
         {
             try
             {
-                var requestBody = new ProcessInstanceRequest();
-                requestBody.ccList = decorateMap.ccList;
-                requestBody.deptId = decorateMap.deptId;
-                requestBody.processCode = decorateMap.processCode;
-                requestBody.ccPosition = decorateMap.ccPosition;
-                requestBody.approvers = decorateMap.approvers;
-                requestBody.originatorUserId = decorateMap.originatorUserId;
-                requestBody.microappAgentId = decorateMap.microappAgentId;
-                List<FormComponentValueVO> result = new List<FormComponentValueVO>();
+                var requestBody = _map.Map<ProcessInstanceRequest>(decorateMap);
+                //var requestBody = new ProcessInstanceRequest();
+                //requestBody.ccList = decorateMap.ccList;
+                //requestBody.deptId = decorateMap.deptId;
+                //requestBody.processCode = decorateMap.processCode;
+                //requestBody.ccPosition = decorateMap.ccPosition;
+                //requestBody.approvers = decorateMap.approvers;
+                //requestBody.originatorUserId = decorateMap.originatorUserId;
+                //requestBody.microappAgentId = decorateMap.microappAgentId;
+                var result = new List<FormComponentValueVO>();
+                //单行组件组装
                 if (CollectionUtil.isEmpty(decorateMap.textForms))
                 {
-                    result.AddRange(decorateMap.textForms.Select(v => new FormComponentValueVO { name = v.name, value = !String.IsNullOrWhiteSpace(v.value) ? v.value : "无" }));
+                    result.AddRange(decorateMap.textForms.Select(v => new FormComponentValueVO { 
+                        name = v.name, value = !string.IsNullOrEmpty(v.value) ? v.value : "无" 
+                    }));
                 }
-                if (CollectionUtil.isEmpty(decorateMap.attachments) && CollectionUtil.isEmpty(decorateMap.attachments.Select(e => e.attachs).ToList()))
+                //附件组装，需提前提交至钉盘
+                if (CollectionUtil.isEmpty(decorateMap.attachments))
                 {
                     foreach (var item in decorateMap.attachments)
                     {
                         if (item.attachs.Count == 0) continue;
+                        //批量将文件提交至钉盘
                         var fileList = _dingFile.DingFileCommitBatch(decorateMap.originatorUserId, decorateMap.agentId, decorateMap.unionId, item.attachs).Result;
-                        var fileResponse = new List<DingFileDentryModel>();
-                        foreach (var e in item.attachs)
-                        {
-                            fileResponse.Add(_dingFile.DingFileCommit(decorateMap.originatorUserId, decorateMap.agentId, decorateMap.unionId, e).Result);
-                        }
+                        //var fileResponse = new List<DingFileDentryModel>();
+                        //foreach (var e in item.attachs)
+                        //{
+                        //    fileResponse.Add(_dingFile.DingFileCommit(decorateMap.originatorUserId, decorateMap.agentId, decorateMap.unionId, e).Result);
+                        //}
+
                         result.Add(new FormComponentValueVO
                         {
                             name = item.name,
-                            value = JsonSerializer.Serialize(fileResponse.Select(v => new AttachmentComponentValue
+                            value = JsonSerializer.Serialize(fileList.Select(v => new AttachmentComponentValue
                             {
                                 spaceId = v?.dentry.spaceId ?? String.Empty,
                                 fileSize = v?.dentry?.size ?? 0,
@@ -59,7 +69,7 @@ namespace dingtalk_process
                         });
                     }
                 }
-                //表单明细
+                //表单集合明细
                 if (CollectionUtil.isEmpty(decorateMap.detailForms))
                 {
                     decorateMap.detailForms.ForEach(e => e.textForms.ForEach(e => e.ForEach(e => { if (string.IsNullOrWhiteSpace(e.value)) e.value = "无"; })));

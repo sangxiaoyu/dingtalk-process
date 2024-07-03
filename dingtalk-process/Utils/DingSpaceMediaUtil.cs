@@ -40,8 +40,6 @@ namespace dingtalk_process.Utils
             };
             try
             {
-
-
                 var dingSpace = await _media.DingSpace(spaceInfoModel);
                 var dingSpaceId = new DingSpaceBack();
                 //2.获取上传文件信息
@@ -97,8 +95,6 @@ namespace dingtalk_process.Utils
         {
             try
             {
-
-
                 //1.获取钉钉存储空间
                 var spaceInfoModel = new DingSpaceModel()
                 {
