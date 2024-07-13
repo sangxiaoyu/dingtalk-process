@@ -20,5 +20,17 @@ namespace dingtalk_process
         /// <param name="deptId"></param>
         /// <returns></returns>
         Task<ResponseModel<dynamic>> DingDeptUsers(long deptId, int cursor, int size);
+        /// <summary>
+        /// 根据unionid获取用户userid
+        /// </summary>
+        /// <param name="unionid">员工在当前开发者企业账号范围内的唯一标识，系统生成，不会改变。</param>
+        /// <returns></returns>
+        Task<ResponseModel<dynamic>> DingUserFromUnionId(string unionid);
+        /// <summary>
+        /// 根据userid获取用户信息
+        /// </summary>
+        /// <param name="userid">用户的userId</param>
+        /// <returns></returns>
+        Task<ResponseModel<dynamic>> DingUserFromUserId(string userid);
     }
 }

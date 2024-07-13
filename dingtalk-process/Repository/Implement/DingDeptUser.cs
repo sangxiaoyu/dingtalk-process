@@ -86,5 +86,73 @@ namespace dingtalk_process.Repository
             }
             return response;
         }
+        public async Task<ResponseModel<dynamic>> DingUserFromUnionId(string unionid)
+        {
+            var response = new ResponseModel<dynamic>();
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var token = await _access.GetToken(_constant.APPKEY, _constant.APPSECRET);
+                    var request = await client.PostAsync($@"{_constant.DING_URL_OAAPI}/topapi/user/getbyunionid?access_token={token}",
+                    JsonContent.Create(new
+                    {
+                        unionid = unionid
+                    }));
+                    if (request.IsSuccessStatusCode)
+                    {
+                        var response_model = await request.Content.ReadFromJsonAsync<ResponseModel<UserByUnionId>>();
+                        response.result = response_model?.result ?? new UserByUnionId();
+                        return response;
+                    }
+                    else
+                    {
+                        response.success = false;
+                        response.result = (await request.Content.ReadFromJsonAsync<ErrorBack>()) ?? new ErrorBack();
+                        throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (OApiException error)
+            {
+                error.printStackTrace();
+            }
+            return response;
+        }
+
+        public async Task<ResponseModel<dynamic>> DingUserFromUserId(string userid)
+        {
+            var response = new ResponseModel<dynamic>();
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var token = await _access.GetToken(_constant.APPKEY, _constant.APPSECRET);
+                    var request = await client.PostAsync($@"{_constant.DING_URL_OAAPI}/topapi/v2/user/get?access_token={token}",
+                    JsonContent.Create(new
+                    {
+                        language = "zh_CN",
+                        userid = userid
+                    }));
+                    if (request.IsSuccessStatusCode)
+                    {
+                        var response_model = await request.Content.ReadFromJsonAsync<ResponseModel<DeptUserModel>>();
+                        response.result = response_model?.result ?? new DeptUserModel();
+                        return response;
+                    }
+                    else
+                    {
+                        response.success = false;
+                        response.result = (await request.Content.ReadFromJsonAsync<ErrorBack>()) ?? new ErrorBack();
+                        throw new OApiException((int)request.StatusCode, await request.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (OApiException error)
+            {
+                error.printStackTrace();
+            }
+            return response;
+        }
     }
 }
