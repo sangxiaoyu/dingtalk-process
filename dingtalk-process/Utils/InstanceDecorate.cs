@@ -88,7 +88,6 @@ namespace dingtalk_process
             }
             catch (OApiException error)
             {
-
                 throw new OApiException(400, error.Message);
             }
         }
